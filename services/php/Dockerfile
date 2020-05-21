@@ -15,9 +15,13 @@ RUN chmod +x install.sh \
     && sh install.sh \
     && rm -rf /tmp/extensions
 
-ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
+#ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
 
-RUN chmod uga+x /usr/local/bin/install-php-extensions
+#RUN chmod uga+x /usr/local/bin/install-php-extensions
+
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+
+RUN install-php-extensions gd xdebug
 
 RUN apk --no-cache add tzdata \
     && cp "/usr/share/zoneinfo/$TZ" /etc/localtime \
